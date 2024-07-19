@@ -4,20 +4,38 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Cart from "./pages/Cart/Cart";
-import CheckOut from "./pages/CheckOut/Checkout";
 import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import { useEffect, useState } from "react";
+import { CartContext } from "./components/context/CartContext/CartContext";
+import { getProducts } from "./services/ProductServices/ProductServices";
+import Favorites from "./pages/Favorites/Favorites";
 
 function App() {
+  const [cartContext, setCartContext] = useState({
+    products: null,
+  });
+
+  useEffect(() => {
+    getProducts()
+    .then(snapshot => {
+      setCartContext({products: snapshot})
+    })
+    }, []);
+    
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" exact element={<Home />} />
-        <Route path="/home" exact element={<Home />} />
-        <Route path="product/:id" exact element={<ProductDetails />} />
-        <Route path="cart" exact element={<Cart />} />
-        <Route path="checkout" exact element={<CheckOut />} />
-      </Routes>
+      <CartContext.Provider value={{ ...cartContext, setCartContext }}>
+        <Header />
+        <Routes>
+          <Route path="/" exact element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="favorites" element={<Favorites />} />
+        </Routes>
+        <Footer />
+      </CartContext.Provider>
     </BrowserRouter>
   );
 }
