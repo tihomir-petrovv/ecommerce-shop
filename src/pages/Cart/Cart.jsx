@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { AppContext } from "../../components/context/UserContext/UserContext"
 import { getUserCart, removeItemFromUserCart } from "../../services/UserServices/cart-services"
+import "../Home/Home.css"
 
 export default function Cart () {
     const { user } = useContext(AppContext)
@@ -19,10 +20,14 @@ export default function Cart () {
         setCart(cart.filter((item) => item.id !== product.id))
     }
 
+    if(!cart) {
+        return <h1>Loading...</h1>
+    }
+
     return (
         <div>
             {cart.length > 0 ? (
-                <div>
+                <div id="items">
                     {cart.map((item) => (
                         <div key={item.id} className='item'>
                         <img src={item.image} alt={item.title} />
