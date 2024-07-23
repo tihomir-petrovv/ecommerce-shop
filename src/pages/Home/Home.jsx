@@ -1,14 +1,16 @@
 import { useContext } from 'react';
 import { CartContext } from '../../components/context/CartContext/CartContext';
 import "./Home.css"
+import { setItemsToUserCart } from '../../services/UserServices/cart-services';
+import { AppContext } from '../../components/context/UserContext/UserContext';
 
 
 export default function Home () {
-
-    const { products, cart } = useContext(CartContext)
+    const { user } = useContext(AppContext)
+    const { products } = useContext(CartContext)
 
     const addToCart = (product) => {
-        cart.push(product);
+        setItemsToUserCart(user.uid, product)
     }
   
     if(!products) {
