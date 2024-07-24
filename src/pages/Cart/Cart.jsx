@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../components/context/UserContext/UserContext";
 import {
   getUserCart,
+  increaseOrDecreaseItemAmount,
+  itemAmountLiveChange,
   removeItemFromUserCart,
 } from "../../services/UserServices/cart-services";
 import { Box, Button, ImageListItem, Typography } from "@mui/material";
@@ -19,9 +21,20 @@ export default function Cart() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = itemAmountLiveChange(user.uid, setCart);
+      return () => unsubscribe();
+    }
+  }, [user]);
+
   const removeItem = (product) => {
     removeItemFromUserCart(user.uid, product);
     setCart(cart.filter((item) => item.id !== product.id));
+  };
+
+  const itemAmountChange = async (product, typeOfOperand) => {
+    increaseOrDecreaseItemAmount(user.uid, product, typeOfOperand);
   };
 
   if (!cart) {
@@ -55,6 +68,8 @@ export default function Cart() {
                 gap: "10px",
                 flexWrap: "wrap",
                 justifyContent: "space-between",
+                backgroundColor: "#f5f5f5",
+                borderRadius: "15px",
               }}
               className="cart-items"
             >
@@ -108,6 +123,7 @@ export default function Cart() {
                       fontSize: "30px",
                       width: "10px",
                     }}
+                    onClick={() => itemAmountChange(item, "-")}
                   >
                     -
                   </Button>
@@ -117,6 +133,7 @@ export default function Cart() {
                       fontSize: "30px",
                       width: "10px",
                     }}
+                    onClick={() => itemAmountChange(item, "+")}
                   >
                     +
                   </Button>
@@ -149,7 +166,9 @@ export default function Cart() {
         >
           <Typography variant="h5">
             Total: $
-            {cart.reduce((acc, item) => acc + item.price * item.amount, 0)}
+            {cart
+              .reduce((acc, item) => acc + item.price * item.amount, 0)
+              .toFixed(2)}
           </Typography>
           <Button variant="contained">Checkout</Button>
         </Box>
