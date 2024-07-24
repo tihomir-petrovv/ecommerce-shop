@@ -6,7 +6,18 @@ import {
 } from "../../services/UserServices/user-services";
 import { registerUser } from "../../services/UserServices/auth-services";
 import { useNavigate } from "react-router-dom";
-import { Avatar, Box, Button, Container, createTheme, CssBaseline, Grid, TextField, ThemeProvider, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  createTheme,
+  CssBaseline,
+  Grid,
+  TextField,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
 
@@ -54,19 +65,22 @@ export default function SignIn() {
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+        <Link to="/" variant="body2">
+          eShop.bg
+        </Link>
         <Box
           sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            marginTop: 3,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
             minHeight: "80vh",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h4">
             Sign up
           </Typography>
           <Box sx={{ mt: 3 }}>
@@ -146,7 +160,7 @@ export default function SignIn() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/logIn" variant="body2">
+                <Link to="/logIn" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

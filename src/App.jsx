@@ -1,6 +1,6 @@
 // import React from "react";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Cart from "./pages/Cart/Cart";
@@ -18,6 +18,7 @@ import { getUserData } from "./services/UserServices/user-services";
 import { AppContext } from "./components/context/UserContext/UserContext";
 
 function App() {
+  const location = useLocation();
   const [cartContext, setCartContext] = useState({
     products: null,
   });
@@ -48,25 +49,34 @@ function App() {
     }
   }, [user]);
 
+  const hideHeaderFooter = ["/signIn", "/logIn"];
+  const showHeaderFooter = !hideHeaderFooter.includes(location.pathname);
+
   return (
-    <BrowserRouter>
-      <AppContext.Provider value={{ ...userContext, setUserContext }}>
-        <CartContext.Provider value={{ ...cartContext, setCartContext }}>
-          <Header />
-          <Routes>
-            <Route path="/" exact element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/signIn" element={<SignIn />} />
-            <Route path="/logIn" element={<LogIn />} />
-            <Route path="product/:id" element={<ProductDetails />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="favorites" element={<Favorites />} />
-          </Routes>
-          <Footer />
-        </CartContext.Provider>
-      </AppContext.Provider>
-    </BrowserRouter>
+    <AppContext.Provider value={{ ...userContext, setUserContext }}>
+      <CartContext.Provider value={{ ...cartContext, setCartContext }}>
+        {showHeaderFooter && <Header />}
+        <Routes>
+          <Route path="/" exact element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/logIn" element={<LogIn />} />
+          <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="favorites" element={<Favorites />} />
+        </Routes>
+        {showHeaderFooter && <Footer />}
+      </CartContext.Provider>
+    </AppContext.Provider>
   );
 }
 
-export default App;
+const AppWrapper = () => {
+  return (
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  );
+};
+
+export default AppWrapper;
