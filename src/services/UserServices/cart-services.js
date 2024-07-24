@@ -19,7 +19,8 @@ export const getUserCart = async (userId) => {
 export const setItemsToUserCart = (userId, product) => {
 
     return set(ref(db, `carts/${userId}/${product.id}`), {
-        ...product
+        ...product,
+        amount: 1,
     })
 }
 

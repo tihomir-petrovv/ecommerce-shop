@@ -1,0 +1,19 @@
+@media screen and (max-width: 650px) {
+  .MuiBox-root.cart-amount {
+    display: flex;
+    flex-direction: row;
+  }
+  .MuiBox-root.cart-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .MuiBox-root.cart-container {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin: 0px 10px 0px 10px;
+  }
+}
