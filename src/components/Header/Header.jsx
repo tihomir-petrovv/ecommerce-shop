@@ -7,7 +7,7 @@ import { AppContext } from "../context/UserContext/UserContext";
 import { logoutUser } from "../../services/UserServices/auth-services";
 
 export default function Header() {
-  const { user, userData, setUserContext } = useContext(AppContext);
+  const { user, setUserContext } = useContext(AppContext);
   const navigate = useNavigate();
 
   const logOut = () => {
@@ -22,7 +22,6 @@ export default function Header() {
   return (
     <header id="header">
       <NavLink to={"/home"}>eShop.bg</NavLink>
-      <h3>Menu</h3>
       <input type="text" />
       <NavLink to={"/cart"}>
         <PiShoppingCartThin />

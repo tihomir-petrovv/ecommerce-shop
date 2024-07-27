@@ -72,7 +72,10 @@ export const itemAmountLiveChange = (userId, setCart) => {
         id: key,
         ...snapshot.val()[key],
       }));
-      setCart(cart);
+
+      const sortedCart = cart.sort((a,b) => a.addDate - b.addDate)
+
+      setCart(sortedCart);
     } else {
       setCart(null);
     }
