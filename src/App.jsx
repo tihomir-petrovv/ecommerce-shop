@@ -66,7 +66,6 @@ function App() {
           <Route path="product/:id" element={<ProductDetails />} />
           <Route path="cart" element={<Cart />} />
           <Route path="favorites" element={<Favorites />} />
-          {/* <Route path="/category/:category" element={<CategoryItems />} /> */}
         </Routes>
         {showHeaderFooter && <Footer />}
       </CartContext.Provider>
