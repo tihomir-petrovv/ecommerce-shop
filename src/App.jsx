@@ -17,6 +17,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./services/UserServices/user-services";
 import { AppContext } from "./components/context/UserContext/UserContext";
 import ItemsMenu from "./components/ItemsMenu/ItemsMenu";
+import CategoryItems from "./components/ShowCategoryItems/CategoryItems";
 
 function App() {
   const location = useLocation();
@@ -66,6 +67,7 @@ function App() {
           <Route path="product/:id" element={<ProductDetails />} />
           <Route path="cart" element={<Cart />} />
           <Route path="favorites" element={<Favorites />} />
+          <Route path="category/:categoryID" element={<CategoryItems />} />
         </Routes>
         {showHeaderFooter && <Footer />}
       </CartContext.Provider>

@@ -42,7 +42,7 @@ export default function ItemsMenu() {
     }, 50);
   }
 
-  const menuItemOnClick = (category) => {
+  const goToCategoryItems = (category) => {
     return navigate(`/category/${category}`);
   };
 
@@ -95,7 +95,7 @@ export default function ItemsMenu() {
           {categories.map((category) => {
             return (
               <MenuItem key={category} onClick={() => {
-                menuItemOnClick(category);
+                goToCategoryItems(category);
                 handleClose();
               }}>
                 {category}

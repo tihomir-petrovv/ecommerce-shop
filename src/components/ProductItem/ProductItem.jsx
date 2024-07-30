@@ -21,7 +21,7 @@ export default function ProductItem({ product }) {
 
 ProductItem.propTypes = {
   product: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     image: PropTypes.string,
     title: PropTypes.string,
     price: PropTypes.number,
