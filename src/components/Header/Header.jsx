@@ -64,13 +64,17 @@ export default function Header() {
       <div className="cart-items">
         <NavLink to={"/cart"}>
           <PiShoppingCartThin />
-          {cartItems && cartItems.length > 0 ? <h3>{cartItems.length}</h3> : null}
+          {cartItems && cartItems.length > 0 ? (
+            <h3>{cartItems.length}</h3>
+          ) : null}
         </NavLink>
       </div>
       <div className="cart-items">
         <NavLink to={"/favorites"}>
           <CiHeart />
-          {favoriteItems && favoriteItems.length > 0 ? <h3>{favoriteItems.length}</h3> : null}
+          {favoriteItems && favoriteItems.length > 0 ? (
+            <h3>{favoriteItems.length}</h3>
+          ) : null}
         </NavLink>
       </div>
       {user ? (

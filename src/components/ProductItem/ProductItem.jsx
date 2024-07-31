@@ -9,6 +9,8 @@ import { AppContext } from "../context/UserContext/UserContext";
 import PropTypes from "prop-types";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdFavorite } from "react-icons/md";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ProductItem({ product }) {
   const [inFavorites, setInFavorites] = useState(false);
@@ -16,6 +18,9 @@ export default function ProductItem({ product }) {
 
   const addToCart = (product) => {
     setItemsToUserCart(user.uid, product);
+    toast.success(`Item ${product.title} was added to your cart!`, {
+      autoClose: 2000,
+    });
   };
 
   const toggleFavorite = (product) => {
@@ -70,6 +75,7 @@ export default function ProductItem({ product }) {
           <button>Add to cart</button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
