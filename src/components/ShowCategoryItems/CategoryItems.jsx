@@ -3,6 +3,7 @@ import ProductItem from "../ProductItem/ProductItem";
 import { CartContext } from "../context/CartContext/CartContext";
 import { useParams } from "react-router-dom";
 import FilterItems from "../FilterItems/FilterItems";
+import { Box } from "@mui/material";
 
 export default function CategoryItems() {
   const { products } = useContext(CartContext);
@@ -14,7 +15,10 @@ export default function CategoryItems() {
   useEffect(() => {
     if (products) {
       const categoryProducts = products.filter(
-        (product) => product.category === categoryID && product.price >= minPrice && product.price <= maxPrice
+        (product) =>
+          product.category === categoryID &&
+          product.price >= minPrice &&
+          product.price <= maxPrice
       );
       setCategoryProducts(categoryProducts);
     }
@@ -25,13 +29,19 @@ export default function CategoryItems() {
   }
 
   return (
-    <div>
-      <FilterItems setMinPrice={setMinPrice} setMaxPrice={setMaxPrice}/>
+    <Box sx={{
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "start",
+      gap: 2,
+      padding: 2,
+    }}>
+      <FilterItems setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} />
       <div id="items">
         {categoryProducts.map((product) => (
           <ProductItem key={product.id} product={product} />
         ))}
       </div>
-    </div>
+    </Box>
   );
 }
