@@ -17,7 +17,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./services/UserServices/user-services";
 import { AppContext } from "./components/context/UserContext/UserContext";
 import ItemsMenu from "./components/ItemsMenu/ItemsMenu";
-import CategoryItems from "./pages/ShowCategoryItems/CategoryItems";
+import CategoryItems from "./pages/ItemsInCategory/CategoryItems";
 
 
 function App() {

@@ -14,6 +14,7 @@
   max-width: 200px;
   flex: 1 1 100%;
   box-sizing: border-box;
+  position: relative;
 }
 
 #items .item:hover {
@@ -77,6 +78,24 @@
 .add-to-cart-btn #icon svg{
   color: rgb(0, 0, 0);
   width: 20px;
+}
+
+.no-favorite-item{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  z-index: 100;
+}
+
+.favorite-item{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: rgb(255, 0, 0);
+  cursor: pointer;
+  z-index: 100;
 }
 
 @media (min-width: 600px) {
