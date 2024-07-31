@@ -16,6 +16,10 @@
   box-sizing: border-box;
 }
 
+#items .item:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
 #items .item img {
   width: 150px;
   height: 150px;
