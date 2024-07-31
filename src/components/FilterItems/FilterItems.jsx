@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import "./FilterItems.css";
 import { IoIosArrowForward } from "react-icons/io";
+import { Button } from "@mui/material";
 
 export default function FilterItems({ setMinPrice, setMaxPrice }) {
   const [minPrice, setMinimumPrice] = useState(0);
@@ -52,7 +53,7 @@ export default function FilterItems({ setMinPrice, setMaxPrice }) {
       <div>
         <h3>Price Range:</h3>
       </div>
-      <div>
+      <div id="price-range">
         <label>
           <input
             type="text"
@@ -76,9 +77,9 @@ export default function FilterItems({ setMinPrice, setMaxPrice }) {
             onKeyDown={handleKeyPress}
           />
         </label>
-        <button onClick={handleFilter}>
+        <Button onClick={handleFilter}>
           <IoIosArrowForward />
-        </button>
+        </Button>
       </div>
       {numberError && <p>{numberError}</p>}
     </div>

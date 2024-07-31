@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { CartContext } from "../../components/context/CartContext/CartContext";
 import "./Home.css";
 import ProductItem from "../../components/ProductItem/ProductItem";
+import { Box } from "@mui/material";
 
 export default function Home() {
   const { products } = useContext(CartContext);
@@ -10,10 +11,10 @@ export default function Home() {
   }
 
   return (
-    <div id="items">
+    <Box id="items">
       {products.map((product) => (
         <ProductItem key={product.id} product={product} />
       ))}
-    </div>
+    </Box>
   );
 }

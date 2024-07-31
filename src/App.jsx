@@ -17,7 +17,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./services/UserServices/user-services";
 import { AppContext } from "./components/context/UserContext/UserContext";
 import ItemsMenu from "./components/ItemsMenu/ItemsMenu";
-import CategoryItems from "./components/ShowCategoryItems/CategoryItems";
+import CategoryItems from "./pages/ShowCategoryItems/CategoryItems";
+
 
 function App() {
   const location = useLocation();
