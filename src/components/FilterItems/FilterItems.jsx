@@ -1,48 +1,91 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "./FilterItems.css";
+import { IoIosArrowForward } from "react-icons/io";
 
-export default function FilterItems({ setMinPrice, setMaxPrice}) {
+export default function FilterItems({ setMinPrice, setMaxPrice }) {
   const [minPrice, setMinimumPrice] = useState(0);
   const [maxPrice, setMaximumPrice] = useState(1000);
 
+  // Error message for invalid input in price range
+  const [numberError, setNumberError] = useState("");
+
+  const handleFilter = () => {
+    setMinPrice(minPrice);
+    setMaxPrice(maxPrice);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleFilter();
+    }
+  };
+
+  const handleMinPriceChange = (e) => {
+    const value = e.target.value;
+    if (!isNaN(value)) {
+      setMinimumPrice(Number(value));
+      setNumberError("");
+    } else {
+      setNumberError("Please enter only numbers");
+      setTimeout(() => {
+        setNumberError("");
+      }, 3000);
+    }
+  };
+
+  const handleMaxPriceChange = (e) => {
+    const value = e.target.value;
+    if (!isNaN(value)) {
+      setMaximumPrice(Number(value));
+      setNumberError("");
+    } else {
+      setNumberError("Please enter only numbers");
+      setTimeout(() => {
+        setNumberError("");
+      }, 3000);
+    }
+  };
+
   return (
     <div className="filter">
-      <label>
-        Min Price:
-        <input
-          type="range"
-          min="0"
-          max="1000"
-          step={10}
-          value={minPrice}
-          onChange={(e) => {
-            setMinPrice(Number(e.target.value));
-            setMinimumPrice(Number(e.target.value));
-          }}
-        />
-        {minPrice}
-      </label>
-      <label>
-        Max Price:
-        <input
-          type="range"
-          min="0"
-          max="1000"
-          step={10}
-          value={maxPrice}
-          onChange={(e) => {
-            setMaxPrice(Number(e.target.value));
-            setMaximumPrice(Number(e.target.value));
-          }}
-        />
-        {maxPrice}
-      </label>
+      <div>
+        <h3>Price Range:</h3>
+      </div>
+      <div>
+        <label>
+          <input
+            type="text"
+            min=""
+            max="1000"
+            step={10}
+            value={minPrice}
+            onChange={handleMinPriceChange}
+            onKeyDown={handleKeyPress}
+          />
+        </label>
+        <span> - </span>
+        <label>
+          <input
+            type="text"
+            min="0"
+            max="1000"
+            step={10}
+            value={maxPrice}
+            onChange={handleMaxPriceChange}
+            onKeyDown={handleKeyPress}
+          />
+        </label>
+        <button onClick={handleFilter}>
+          <IoIosArrowForward />
+        </button>
+      </div>
+      {numberError && <p>{numberError}</p>}
     </div>
   );
 }
 
 FilterItems.propTypes = {
-    setMinPrice: PropTypes.func.isRequired,
-    setMaxPrice: PropTypes.func.isRequired,
+  setMinPrice: PropTypes.func.isRequired,
+  setMaxPrice: PropTypes.func.isRequired,
 };
