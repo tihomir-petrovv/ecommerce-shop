@@ -75,7 +75,7 @@ export default function CategoryItems() {
         </Box>
         <div id="items">
           {categoryProducts.map((product) => (
-            <ProductItem key={product.id} product={product} />
+            <ProductItem key={product.id} product={product}/>
           ))}
         </div>
       </Box>

@@ -11,6 +11,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { MdFavorite } from "react-icons/md";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./ProductItem.css";
 
 export default function ProductItem({ product }) {
   const [inFavorites, setInFavorites] = useState(false);

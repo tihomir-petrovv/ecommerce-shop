@@ -1,7 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../components/context/UserContext/UserContext";
-import { getUserFavoriteItems } from "../../services/UserServices/favorite-services";
-
+import {
+  favoriteItemsAmountLiveChange,
+} from "../../services/UserServices/favorite-services";
+import ProductItem from "../../components/ProductItem/ProductItem";
+import { Box, Typography } from "@mui/material";
 
 export default function Favorites() {
   const { user } = useContext(AppContext);
@@ -9,31 +12,56 @@ export default function Favorites() {
 
   useEffect(() => {
     if (user) {
-      getUserFavoriteItems(user.uid).then((data) => {
-        setFavorites(data);
-      });
+      const subscription = favoriteItemsAmountLiveChange(
+        user.uid,
+        setFavorites
+      );
+      return () => subscription();
     }
   }, [user]);
 
   if (!favorites) {
-    return <h1>Loading...</h1>;
+    return (
+      <Box
+        id="items"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "start",
+          gap: 2,
+          padding: 2,
+        }}
+      >
+        <Typography variant="h4">Favorites</Typography>
+        <Typography variant="h5">No favorite items</Typography>
+      </Box>
+    );
   }
 
   return (
-    <div className="favorites">
-      <div className="favorites-container">
-        {favorites.length > 0 ? (
-          favorites.map((favorite) => (
-            <div key={favorite.id} className="favorite-item">
-              <img src={favorite.image} alt={favorite.title} />
-              <h2>{favorite.title}</h2>
-              <p>${favorite.price}</p>
-            </div>
-          ))
-        ) : (
-          <h2>No favorites yet</h2>
-        )}
-      </div>
-    </div>
+    <Box
+      id="items"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "start",
+        gap: 2,
+        padding: 2,
+      }}
+    >
+      <Typography variant="h4">Favorites</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "start",
+          gap: 2,
+        }}
+      >
+        {favorites.map((product) => (
+          <ProductItem key={product.id} product={product} />
+        ))}
+      </Box>
+    </Box>
   );
 }
