@@ -13,12 +13,14 @@ import {
   favoriteItemsAmountLiveChange,
   getUserFavoriteItems,
 } from "../../services/UserServices/favorite-services";
+import FavPopUp from "./FavoritesPopUp/FavPopUp";
 
 export default function Header() {
   const { user, setUserContext } = useContext(AppContext);
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [favoriteItems, setFavoriteItems] = useState([]);
+  const [openFavPopUp, setOpenFavPopUp] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -57,6 +59,10 @@ export default function Header() {
     navigate("/home");
   };
 
+  const handleFavPopUp = () => {
+    setOpenFavPopUp(!openFavPopUp);
+  }
+
   return (
     <header id="header">
       <NavLink to={"/home"}>eShop.bg</NavLink>
@@ -69,13 +75,14 @@ export default function Header() {
           ) : null}
         </NavLink>
       </div>
-      <div className="cart-items">
+      <div className="cart-items" onMouseEnter={handleFavPopUp} onMouseLeave={handleFavPopUp}>
         <NavLink to={"/favorites"}>
           <CiHeart />
           {favoriteItems && favoriteItems.length > 0 ? (
             <h3>{favoriteItems.length}</h3>
           ) : null}
         </NavLink>
+        <FavPopUp open={openFavPopUp} FavItems={favoriteItems} />
       </div>
       {user ? (
         <div>
