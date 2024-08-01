@@ -60,8 +60,14 @@ export default function Header() {
   };
 
   const handleFavPopUp = () => {
-    setOpenFavPopUp(!openFavPopUp);
-  }
+    if (openFavPopUp === true) {
+      setTimeout(() => {
+        setOpenFavPopUp(!openFavPopUp);
+      }, 2000);
+    } else {
+      setOpenFavPopUp(!openFavPopUp);
+    }
+  };
 
   return (
     <header id="header">
@@ -75,7 +81,11 @@ export default function Header() {
           ) : null}
         </NavLink>
       </div>
-      <div className="cart-items" onMouseEnter={handleFavPopUp} onMouseLeave={handleFavPopUp}>
+      <div
+        className="cart-items"
+        onMouseEnter={handleFavPopUp}
+        onMouseLeave={handleFavPopUp}
+      >
         <NavLink to={"/favorites"}>
           <CiHeart />
           {favoriteItems && favoriteItems.length > 0 ? (
