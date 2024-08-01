@@ -12,10 +12,12 @@ import { MdFavorite } from "react-icons/md";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./ProductItem.css";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductItem({ product }) {
   const [inFavorites, setInFavorites] = useState(false);
   const { user } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const addToCart = (product) => {
     setItemsToUserCart(user.uid, product);
@@ -50,9 +52,13 @@ export default function ProductItem({ product }) {
     }
   }, [user, product]);
 
+  const goToProductDetails = () => {
+    navigate(`/product/${product.id}`);
+  }
+
   return (
     <div key={product.id} className="item">
-      <div className="item-props">
+      <div className="item-props" onClick={() => goToProductDetails()}>
         <div className={inFavorites ? "favorite-item" : "no-favorite-item"}>
           <MdFavorite
             onClick={() => {

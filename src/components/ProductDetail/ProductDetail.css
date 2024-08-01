@@ -1,0 +1,19 @@
+#product-details-main-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+}
+
+#product-details-title {
+    font-size: 25px;
+    font-weight: bold;
+    font-weight: 300;
+    text-align: left;
+}
+
+#product-details-main-container img {
+    width: 200px;
+    height: 200px;
+    margin-right: 50px;
+}
