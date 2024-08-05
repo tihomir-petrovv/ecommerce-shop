@@ -14,6 +14,7 @@ import {
   getUserFavoriteItems,
 } from "../../services/UserServices/favorite-services";
 import FavPopUp from "./FavoritesPopUp/FavPopUp";
+import ItemsMenu from "../ItemsMenu/ItemsMenu";
 
 export default function Header() {
   const { user, setUserContext } = useContext(AppContext);
@@ -70,6 +71,7 @@ export default function Header() {
   return (
     <header id="header">
       <NavLink to={"/home"}>eShop.bg</NavLink>
+      <ItemsMenu />
       <input type="text" />
       <div className="cart-items">
         <NavLink to={"/cart"}>

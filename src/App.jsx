@@ -16,7 +16,6 @@ import { auth } from "./config/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./services/UserServices/user-services";
 import { AppContext } from "./components/context/UserContext/UserContext";
-import ItemsMenu from "./components/ItemsMenu/ItemsMenu";
 import CategoryItems from "./pages/ItemsInCategory/CategoryItems";
 
 
@@ -59,7 +58,6 @@ function App() {
     <AppContext.Provider value={{ ...userContext, setUserContext }}>
       <CartContext.Provider value={{ ...cartContext, setCartContext }}>
         {showHeaderFooter && <Header />}
-        {showHeaderFooter && <ItemsMenu />}
         <Routes>
           <Route path="/" exact element={<Home />} />
           <Route path="/home" element={<Home />} />

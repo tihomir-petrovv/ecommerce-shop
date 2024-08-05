@@ -2,14 +2,18 @@ import { useContext, useEffect, useState } from "react";
 import { Box, Button, Menu, MenuItem } from "@mui/material";
 import { CartContext } from "../context/CartContext/CartContext";
 import { useNavigate } from "react-router-dom";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { IoMdClose } from "react-icons/io";
+import "./ItemsMenu.css";
 
 export default function ItemsMenu() {
   const { products } = useContext(CartContext);
   const [categories, setCategories] = useState([]);
-  let currentlyHovering = false;
   const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(false);
+
+  const [changeBurgerMenu, setChangeBurgerMenu] = useState(false);
 
   useEffect(() => {
     if (products) {
@@ -23,23 +27,12 @@ export default function ItemsMenu() {
     if (anchorEl !== event.currentTarget) {
       setAnchorEl(event.currentTarget);
     }
-  }
-
-  function handleHover() {
-    currentlyHovering = true;
+    setChangeBurgerMenu(true);
   }
 
   function handleClose() {
     setAnchorEl(null);
-  }
-
-  function handleCloseHover() {
-    currentlyHovering = false;
-    setTimeout(() => {
-      if (!currentlyHovering) {
-        handleClose();
-      }
-    }, 50);
+    setChangeBurgerMenu(false);
   }
 
   const goToCategoryItems = (category) => {
@@ -52,29 +45,27 @@ export default function ItemsMenu() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "100%",
+        width: "20%",
       }}
+      className="categories-menu"
     >
       <Box
         sx={{
           display: "flex",
-          justifyContent: "left",
+          justifyContent: "center",
           alignItems: "center",
-          width: "50%",
+          width: "fit-content",
           backdropFilter: "blur(10px)",
-          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          backgroundColor: "rgb(242, 242, 247)",
           boxShadow: " 0px 2px rgba(0, 0, 0, 0.1)",
-          color: "#646cff",
-          borderRadius: "10px",
+          color: "#3939f5",
+          borderRadius: "5px",
+          padding: "0 5px",
         }}
       >
-        <Button
-          aria-owns={anchorEl ? "simple-menu" : undefined}
-          aria-haspopup="true"
-          onClick={handleClick}
-          onMouseOver={handleClick}
-          onMouseLeave={handleCloseHover}
-        >
+        {changeBurgerMenu === false && <RxHamburgerMenu />}
+        {changeBurgerMenu === true && <IoMdClose />}
+        <Button onClick={handleClick} className="menu-button">
           Categories
         </Button>
         <Menu
@@ -82,21 +73,18 @@ export default function ItemsMenu() {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleClose}
-          MenuListProps={{
-            onMouseEnter: handleHover,
-            onMouseLeave: handleCloseHover,
-            style: { pointerEvents: "auto" },
-          }}
           anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
           transformOrigin={{ horizontal: "left", vertical: "top" }}
-          sx={{ pointerEvents: "none", width: "500px" }}
         >
           {categories.map((category) => {
             return (
-              <MenuItem key={category} onClick={() => {
-                goToCategoryItems(category);
-                handleClose();
-              }}>
+              <MenuItem
+                key={category}
+                onClick={() => {
+                  goToCategoryItems(category);
+                  handleClose();
+                }}
+              >
                 {category}
               </MenuItem>
             );
