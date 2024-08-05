@@ -18,6 +18,11 @@
   height: 150px;
   object-fit: fill;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+#items .item h2 {
+  cursor: pointer;
 }
 
 #items .item-props {

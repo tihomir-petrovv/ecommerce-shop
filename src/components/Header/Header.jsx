@@ -61,9 +61,7 @@ export default function Header() {
 
   const handleFavPopUp = () => {
     if (openFavPopUp === true) {
-      setTimeout(() => {
         setOpenFavPopUp(!openFavPopUp);
-      }, 2000);
     } else {
       setOpenFavPopUp(!openFavPopUp);
     }

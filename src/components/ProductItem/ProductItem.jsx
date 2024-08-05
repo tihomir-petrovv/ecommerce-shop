@@ -58,7 +58,7 @@ export default function ProductItem({ product }) {
 
   return (
     <div key={product.id} className="item">
-      <div className="item-props" onClick={() => goToProductDetails()}>
+      <div className="item-props" >
         <div className={inFavorites ? "favorite-item" : "no-favorite-item"}>
           <MdFavorite
             onClick={() => {
@@ -66,11 +66,11 @@ export default function ProductItem({ product }) {
             }}
           />
         </div>
-        <img src={product.image} alt={product.title} />
+        <img src={product.image} alt={product.title} onClick={() => goToProductDetails()}/>
         {product.title.length > 30 ? (
-          <h2>{product.title.slice(0, 20).concat("...")}</h2>
+          <h2 onClick={() => goToProductDetails()}>{product.title.slice(0, 20).concat("...")}</h2>
         ) : (
-          <h2>{product.title}</h2>
+          <h2 onClick={() => goToProductDetails()}>{product.title}</h2>
         )}
         <p>${product.price}</p>
       </div>
