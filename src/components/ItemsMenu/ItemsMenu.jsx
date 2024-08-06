@@ -4,15 +4,13 @@ import { CartContext } from "../context/CartContext/CartContext";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdClose } from "react-icons/io";
-import "./ItemsMenu.css";
 
 export default function ItemsMenu() {
   const { products } = useContext(CartContext);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = useState(false);
-
+  const [anchorEl, setAnchorEl] = useState(null);
   const [changeBurgerMenu, setChangeBurgerMenu] = useState(false);
 
   useEffect(() => {
@@ -27,7 +25,7 @@ export default function ItemsMenu() {
     if (anchorEl !== event.currentTarget) {
       setAnchorEl(event.currentTarget);
     }
-    setChangeBurgerMenu(true);
+    setChangeBurgerMenu(!changeBurgerMenu);
   }
 
   function handleClose() {
@@ -48,6 +46,7 @@ export default function ItemsMenu() {
         width: "20%",
       }}
       className="categories-menu"
+      onClick={handleClick}
     >
       <Box
         sx={{
@@ -61,11 +60,12 @@ export default function ItemsMenu() {
           color: "#3939f5",
           borderRadius: "5px",
           padding: "0 5px",
+          cursor: "pointer",
         }}
       >
         {changeBurgerMenu === false && <RxHamburgerMenu />}
         {changeBurgerMenu === true && <IoMdClose />}
-        <Button onClick={handleClick} className="menu-button">
+        <Button className="menu-button">
           Categories
         </Button>
         <Menu
@@ -73,8 +73,6 @@ export default function ItemsMenu() {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleClose}
-          anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-          transformOrigin={{ horizontal: "left", vertical: "top" }}
         >
           {categories.map((category) => {
             return (
