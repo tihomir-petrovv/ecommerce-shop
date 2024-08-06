@@ -15,6 +15,7 @@ import {
 } from "../../services/UserServices/favorite-services";
 import FavPopUp from "./FavoritesPopUp/FavPopUp";
 import ItemsMenu from "../ItemsMenu/ItemsMenu";
+import SearchBar from "./SeachBar/SearchBar";
 
 export default function Header() {
   const { user, setUserContext } = useContext(AppContext);
@@ -62,7 +63,7 @@ export default function Header() {
 
   const handleFavPopUp = () => {
     if (openFavPopUp === true) {
-        setOpenFavPopUp(!openFavPopUp);
+      setOpenFavPopUp(!openFavPopUp);
     } else {
       setOpenFavPopUp(!openFavPopUp);
     }
@@ -72,7 +73,9 @@ export default function Header() {
     <header id="header">
       <NavLink to={"/home"}>eShop.bg</NavLink>
       <ItemsMenu />
-      <input type="text" />
+      <div>
+        <SearchBar />
+      </div>
       <div className="cart-items">
         <NavLink to={"/cart"}>
           <PiShoppingCartThin />

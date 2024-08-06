@@ -15,11 +15,11 @@
   gap: 10px;
 }
 
-#header input {
+#search-container input {
   width: 500px;
-  border-radius: 15px;
+  height: 20px;
+  border-radius: 5px;
   font-size: 15px;
-  padding: 5px;
   border-color: #3939f5;
 }
 
