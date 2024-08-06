@@ -1,4 +1,4 @@
-#items .item{
+#items .item {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -48,7 +48,7 @@
   cursor: pointer;
 }
 
-.add-to-cart-btn #btn{
+.add-to-cart-btn #btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,24 +72,24 @@
   border-top-left-radius: 5px;
 }
 
-.add-to-cart-btn #icon svg{
-  color: rgb(0, 0, 0);
-  width: 20px;
-}
-
-.no-favorite-item{
+.no-favorite-item {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 5px;
+  right: 5px;
   color: rgb(0, 0, 0);
   cursor: pointer;
+  z-index: 1;
 }
 
-.favorite-item{
+.favorite-item {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 5px;
+  right: 5px;
   color: rgb(255, 0, 0);
   cursor: pointer;
   z-index: 1;
+}
+
+.heart svg {
+  font-size: 20px;
 }

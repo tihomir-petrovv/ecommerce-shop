@@ -59,7 +59,7 @@ export default function ProductItem({ product }) {
   return (
     <div key={product.id} className="item">
       <div className="item-props" >
-        <div className={inFavorites ? "favorite-item" : "no-favorite-item"}>
+        <div className={inFavorites ? "favorite-item heart" : "no-favorite-item heart"}>
           <MdFavorite
             onClick={() => {
               toggleFavorite(product);
