@@ -16,14 +16,6 @@
   z-index: 9999;
 }
 
-#search-container input {
-  width: 500px;
-  height: 20px;
-  border-radius: 5px;
-  font-size: 15px;
-  border-color: #3939f5;
-}
-
 .cart-items{
   position: relative;
 }

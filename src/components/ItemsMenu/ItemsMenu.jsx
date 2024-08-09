@@ -20,7 +20,6 @@ export default function ItemsMenu({ openMenu, setOpenMenu }) {
   const navigate = useNavigate();
   const matches = useMediaQuery("(min-width:600px)");
   const [openDrawer, setOpenDrawer] = useState(false);
-  // const [openMenu, setOpenMenu] = useState(false);
   const [changeBurgerMenu, setChangeBurgerMenu] = useState(false);
   const boxRef = useRef(null);
 
@@ -46,7 +45,7 @@ export default function ItemsMenu({ openMenu, setOpenMenu }) {
 
   function handleClick() {
     setOpenMenu(!openMenu);
-    setOpenDrawer(true);
+    setOpenDrawer(!openDrawer);
     setChangeBurgerMenu(!changeBurgerMenu);
   }
 
@@ -139,10 +138,10 @@ export default function ItemsMenu({ openMenu, setOpenMenu }) {
         )}
       </Box>
 
-      {!matches && (
+      {!matches && openDrawer && (
         <Drawer anchor="top" open={openDrawer} onClose={handleClose} sx={{
           '& .MuiDrawer-paper': {
-            top: '55px',
+            top: '53px',
           },
         }}>
           <List>
