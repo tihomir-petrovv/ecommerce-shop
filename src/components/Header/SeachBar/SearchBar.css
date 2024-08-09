@@ -97,3 +97,9 @@
   text-align: center;
   align-items: center;
 }
+
+@media (max-width: 600px) {
+  .search-input-container input {
+    display: none;
+  }
+}

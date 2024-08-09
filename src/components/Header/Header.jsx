@@ -16,8 +16,9 @@ import {
 import FavPopUp from "./FavoritesPopUp/FavPopUp";
 import ItemsMenu from "../ItemsMenu/ItemsMenu";
 import SearchBar from "./SeachBar/SearchBar";
+import PropTypes from "prop-types";
 
-export default function Header() {
+export default function Header({openMenu,setOpenMenu}) {
   const { user, setUserContext } = useContext(AppContext);
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
@@ -72,10 +73,8 @@ export default function Header() {
   return (
     <header id="header">
       <NavLink to={"/home"}>eShop.bg</NavLink>
-      <ItemsMenu />
-      <div>
-        <SearchBar />
-      </div>
+      <ItemsMenu openMenu={openMenu} setOpenMenu={setOpenMenu}/>
+      <SearchBar />
       <div className="cart-items">
         <NavLink to={"/cart"}>
           <PiShoppingCartThin />
@@ -109,4 +108,9 @@ export default function Header() {
       )}
     </header>
   );
+}
+
+Header.propTypes = {
+  openMenu: PropTypes.bool.isRequired,
+  setOpenMenu: PropTypes.func.isRequired,
 }

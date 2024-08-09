@@ -17,7 +17,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserData } from "./services/UserServices/user-services";
 import { AppContext } from "./components/context/UserContext/UserContext";
 import CategoryItems from "./pages/ItemsInCategory/CategoryItems";
-
+import { Box } from "@mui/material";
 
 function App() {
   const location = useLocation();
@@ -29,7 +29,7 @@ function App() {
     user: null,
     userData: null,
   });
-
+  const [openMenu, setOpenMenu] = useState(false);
   const [user] = useAuthState(auth);
 
   useEffect(() => {
@@ -57,7 +57,22 @@ function App() {
   return (
     <AppContext.Provider value={{ ...userContext, setUserContext }}>
       <CartContext.Provider value={{ ...cartContext, setCartContext }}>
-        {showHeaderFooter && <Header />}
+        {showHeaderFooter && (
+          <Header openMenu={openMenu} setOpenMenu={setOpenMenu} />
+        )}
+        {openMenu && (
+          <Box
+            sx={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 2,
+            }}
+          ></Box>
+        )}
         <Routes>
           <Route path="/" exact element={<Home />} />
           <Route path="/home" element={<Home />} />

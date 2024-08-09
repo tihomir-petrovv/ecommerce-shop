@@ -13,6 +13,7 @@
   font-weight: bold;
   width: auto;
   gap: 10px;
+  z-index: 9999;
 }
 
 #search-container input {
