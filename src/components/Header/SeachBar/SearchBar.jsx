@@ -36,6 +36,7 @@ export default function SearchBar() {
       !searchInputRef.current.contains(e.target)
     ) {
       setSearchIconClicked(false);
+      setIsFocused(false);
     }
   };
 
@@ -48,7 +49,6 @@ export default function SearchBar() {
     : [];
 
   useEffect(() => {
-    document.body.style.overflow = isFocused ? "hidden" : "auto";
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
@@ -96,7 +96,7 @@ export default function SearchBar() {
                   position: "fixed",
                   width: "100%",
                   height: "fit-content",
-                  padding: "10px",
+                  padding: "10px 0px 10px 0px",
                   top: "53px",
                   left: "0",
                   zIndex: 9999,
@@ -122,14 +122,24 @@ export default function SearchBar() {
                   position: "fixed",
                   width: "100%",
                   height: "fit-content",
-                  padding: "10px",
                   top: "97px",
                   left: "0",
                   zIndex: 1,
                   backgroundColor: "rgb(33, 33, 199)",
                 }}
               >
-                <Box>
+                <Box sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  width: "100%",
+                  maxHeight: "200px",
+                  top: "97px",
+                  left: "0",
+                  zIndex: 1,
+                  overflowY: "auto",
+                  color: "white",
+                }}>
                   {searchItem.search && filteredItems.length > 0 ? (
                     filteredItems.map((item, index) => (
                       <div

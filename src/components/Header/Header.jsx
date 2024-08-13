@@ -17,8 +17,9 @@ import FavPopUp from "./FavoritesPopUp/FavPopUp";
 import ItemsMenu from "../ItemsMenu/ItemsMenu";
 import SearchBar from "./SeachBar/SearchBar";
 import PropTypes from "prop-types";
+import { Box } from "@mui/material";
 
-export default function Header({openMenu,setOpenMenu}) {
+export default function Header({ openMenu, setOpenMenu }) {
   const { user, setUserContext } = useContext(AppContext);
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
@@ -72,40 +73,55 @@ export default function Header({openMenu,setOpenMenu}) {
 
   return (
     <header id="header">
-      <NavLink to={"/home"}>eShop.bg</NavLink>
-      <ItemsMenu openMenu={openMenu} setOpenMenu={setOpenMenu}/>
+      <Box sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        textAlign: "center",
+      }}>
+        <NavLink to={"/home"}>eShop.bg</NavLink>
+        <ItemsMenu openMenu={openMenu} setOpenMenu={setOpenMenu} />
+      </Box>
       <SearchBar />
-      <div className="cart-items">
-        <NavLink to={"/cart"}>
-          <PiShoppingCartThin />
-          {cartItems && cartItems.length > 0 ? (
-            <h3>{cartItems.length}</h3>
-          ) : null}
-        </NavLink>
-      </div>
-      <div
-        className="cart-items"
-        onMouseEnter={handleFavPopUp}
-        onMouseLeave={handleFavPopUp}
-      >
-        <NavLink to={"/favorites"}>
-          <CiHeart />
-          {favoriteItems && favoriteItems.length > 0 ? (
-            <h3>{favoriteItems.length}</h3>
-          ) : null}
-        </NavLink>
-        <FavPopUp open={openFavPopUp} FavItems={favoriteItems} />
-      </div>
-      {user ? (
-        <div>
-          <button onClick={logOut}>Log Out</button>
+      <Box sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        textAlign: "center",
+        gap: "1rem",
+      }}>
+        <div className="cart-items">
+          <NavLink to={"/cart"}>
+            <PiShoppingCartThin />
+            {cartItems && cartItems.length > 0 ? (
+              <h3>{cartItems.length}</h3>
+            ) : null}
+          </NavLink>
         </div>
-      ) : (
-        <div>
-          <NavLink to={"/signIn"}>Sign In</NavLink>
-          <NavLink to={"/logIn"}>Log In</NavLink>
+        <div
+          className="cart-items"
+          onMouseEnter={handleFavPopUp}
+          onMouseLeave={handleFavPopUp}
+        >
+          <NavLink to={"/favorites"}>
+            <CiHeart />
+            {favoriteItems && favoriteItems.length > 0 ? (
+              <h3>{favoriteItems.length}</h3>
+            ) : null}
+          </NavLink>
+          <FavPopUp open={openFavPopUp} FavItems={favoriteItems} />
         </div>
-      )}
+        {user ? (
+          <div>
+            <button onClick={logOut}>Log Out</button>
+          </div>
+        ) : (
+          <div>
+            <NavLink to={"/signIn"}>Sign In</NavLink>
+            <NavLink to={"/logIn"}>Log In</NavLink>
+          </div>
+        )}
+      </Box>
     </header>
   );
 }
@@ -113,4 +129,4 @@ export default function Header({openMenu,setOpenMenu}) {
 Header.propTypes = {
   openMenu: PropTypes.bool.isRequired,
   setOpenMenu: PropTypes.func.isRequired,
-}
+};

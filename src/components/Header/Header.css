@@ -1,6 +1,6 @@
 #header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 5px;
   position: sticky;
@@ -12,7 +12,6 @@
   font-size: 20px;
   font-weight: bold;
   width: auto;
-  gap: 10px;
   z-index: 9999;
 }
 

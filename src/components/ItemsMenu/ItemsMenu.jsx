@@ -65,7 +65,6 @@ export default function ItemsMenu({ openMenu, setOpenMenu }) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "20%",
       }}
       className="categories-menu"
     >
