@@ -18,6 +18,7 @@ import { getUserData } from "./services/UserServices/user-services";
 import { AppContext } from "./components/context/UserContext/UserContext";
 import CategoryItems from "./pages/ItemsInCategory/CategoryItems";
 import { Box } from "@mui/material";
+import ShippingDetails from "./pages/Cart/ShippingDetails/ShippingDetails";
 
 function App() {
   const location = useLocation();
@@ -51,7 +52,7 @@ function App() {
     }
   }, [user]);
 
-  const hideHeaderFooter = ["/signIn", "/logIn"];
+  const hideHeaderFooter = ["/signIn", "/logIn", "/cart/shipping"];
   const showHeaderFooter = !hideHeaderFooter.includes(location.pathname);
 
   return (
@@ -60,6 +61,7 @@ function App() {
         {showHeaderFooter && (
           <Header openMenu={openMenu} setOpenMenu={setOpenMenu} />
         )}
+
         {openMenu && (
           <Box
             sx={{
@@ -82,6 +84,7 @@ function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="favorites" element={<Favorites />} />
           <Route path="category/:categoryID" element={<CategoryItems />} />
+          <Route path="/cart/shipping" element={<ShippingDetails />} />
         </Routes>
         {showHeaderFooter && <Footer />}
       </CartContext.Provider>

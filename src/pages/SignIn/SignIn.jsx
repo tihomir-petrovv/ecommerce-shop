@@ -65,7 +65,9 @@ export default function SignIn() {
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Link to="/" variant="body2">
+        <Link to="/" variant="body2" style={{
+          color: defaultTheme.palette.primary.main,
+        }}>
           eShop.bg
         </Link>
         <Box

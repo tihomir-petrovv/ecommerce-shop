@@ -8,10 +8,12 @@ import {
 } from "../../services/UserServices/cart-services";
 import { Box, Button, ImageListItem, Typography } from "@mui/material";
 import "./Cart.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
   const { user } = useContext(AppContext);
   const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -37,6 +39,10 @@ export default function Cart() {
     increaseOrDecreaseItemAmount(user.uid, product, typeOfOperand);
   };
 
+  const goToShipping = () => {
+    navigate("/cart/shipping");
+  }
+
   if (!cart) {
     return <h1>Loading...</h1>;
   }
@@ -48,6 +54,8 @@ export default function Cart() {
         justifyContent: "space-between",
         gap: "15px",
         margin: "0px 10px 0px 10px",
+        minHeight: "85vh",
+        overflow: "hidden",
       }}
       className="cart-container"
     >
@@ -57,6 +65,7 @@ export default function Cart() {
             display: "flex",
             flexDirection: "column",
             gap: "15px",
+            padding: "15px",
           }}
         >
           {cart.map((item) => (
@@ -69,7 +78,9 @@ export default function Cart() {
                 flexWrap: "wrap",
                 justifyContent: "space-between",
                 backgroundColor: "#f5f5f5",
-                borderRadius: "15px",
+                boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.3)",
+                borderRadius: "10px",
+                padding: "10px",
               }}
               className="cart-items"
             >
@@ -162,15 +173,22 @@ export default function Cart() {
             justifyContent: "flex-start",
             flexDirection: "column",
             gap: "10px",
+            padding: "20px",
           }}
         >
+          <Typography variant="h5">
+            Total items:{" "}
+            {cart
+              .reduce((acc, item) => acc + item.amount, 0)
+              .toFixed(0)}
+          </Typography>
           <Typography variant="h5">
             Total: $
             {cart
               .reduce((acc, item) => acc + item.price * item.amount, 0)
               .toFixed(2)}
           </Typography>
-          <Button variant="contained">Checkout</Button>
+          <Button variant="contained" onClick={() => goToShipping()}>Checkout</Button>
         </Box>
       )}
     </Box>
