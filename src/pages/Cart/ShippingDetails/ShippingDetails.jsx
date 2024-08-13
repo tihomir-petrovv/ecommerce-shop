@@ -28,7 +28,11 @@ import StepConnector, {
 } from "@mui/material/StepConnector";
 import { PiShoppingCartThin } from "react-icons/pi";
 import { AppContext } from "../../../components/context/UserContext/UserContext";
-import { getUserData, updateUserAddress } from "../../../services/UserServices/user-services";
+import {
+  getUserData,
+  updateUserAddress,
+} from "../../../services/UserServices/user-services";
+import AddOtherAddress from "./AddOtherAddress/AddOtherAddress";
 
 export default function ShippingDetails() {
   const { user, userData, setUserContext } = useContext(AppContext);
@@ -48,6 +52,9 @@ export default function ShippingDetails() {
   });
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true);
+  const [showPopUpForOtherAddress, setShowPopUpForOtherAddress] =
+    useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   const steps = [
     "My Cart",
@@ -68,15 +75,15 @@ export default function ShippingDetails() {
     setLoading(true);
     await updateUserAddress(userData, form);
     if (user) {
-        getUserData(user.uid).then((snapshot) => {
-          if (snapshot.exists()) {
-            setUserContext({
-              user: user,
-              userData: snapshot.val()[Object.keys(snapshot.val())[0]],
-            });
-          }
-        });
-      }
+      getUserData(user.uid).then((snapshot) => {
+        if (snapshot.exists()) {
+          setUserContext({
+            user: user,
+            userData: snapshot.val()[Object.keys(snapshot.val())[0]],
+          });
+        }
+      });
+    }
     setTimeout(() => {
       setLoading(false);
       setShowForm(false);
@@ -95,7 +102,13 @@ export default function ShippingDetails() {
     }
   }, [userData]);
 
-  if (!userData) {
+  useEffect(() => {
+    if (userData && userData.addresses) {
+      setSelectedAddress(Object.keys(userData.addresses)[0]);
+    }
+  }, [userData]);
+
+  if (!userData || !user) {
     return <h1>Loading...</h1>;
   }
 
@@ -162,8 +175,12 @@ export default function ShippingDetails() {
           sx={{
             display: "flex",
             flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
+            width: "100%",
             minHeight: "80vh",
+
+            marginTop: "20px",
           }}
         >
           <Box
@@ -172,216 +189,205 @@ export default function ShippingDetails() {
               flexDirection: "column",
               gap: "20px",
               alignItems: "center",
-              marginTop: "20px",
-              width: "100%",
+              width: "80%",
+              boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.3)",
+              backgroundColor: "rgba(65, 140, 253,0.1)",
+              borderRadius: "10px",
+              padding: "20px",
             }}
           >
-            <FormControl fullWidth>
-              <FormLabel id="demo-radio-buttons-group-label">
-                Delivery Information
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="delivery"
-                name="radio-buttons-group"
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  gap: "20px",
-                  alignItems: "center",
-                  textAlign: "left",
-                  marginBottom: "20px",
-                }}
-                onChange={handleDeliveryOption}
-              >
-                <FormControlLabel
-                  value="delivery"
-                  control={<Radio />}
-                  label="Delivery to address"
-                  sx={{
-                    display: "flex",
-                    gap: "20px",
-                    alignItems: "center",
-                    textAlign: "left",
-                    borderRadius: "10px",
-                    boxShadow: `-3px -3px 5px 1px ${defaultTheme.palette.primary.main}`,
-                    padding: "10px",
-                    marginTop: "10px",
-                    width: "30%",
-                  }}
-                />
-                <FormControlLabel
-                  value="take"
-                  control={<Radio />}
-                  label="Take yourself"
-                  sx={{
-                    display: "flex",
-                    gap: "20px",
-                    alignItems: "center",
-                    textAlign: "left",
-                    borderRadius: "10px",
-                    boxShadow: `3px 3px 5px 1px ${defaultTheme.palette.primary.main}`,
-                    padding: "10px",
-                    marginTop: "10px",
-                    width: "30%",
-                  }}
-                />
-              </RadioGroup>
-            </FormControl>
-          </Box>
-
-          {loading ? (
-            <CircularProgress />
-          ) : showUserOptions.option === "delivery" && !showForm ? (
-            <Box>
-              <Typography variant="h6">Choose address for delivery</Typography>
-              {userData.addresses &&
-                Object.keys(userData.addresses).map((address) => (
-                  <Box key={address}>
-                    <FormControlLabel value={address} control={<Radio />} />
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      Person to contact
-                    </Typography>
-                    <Typography>
-                      {userData.addresses[address].client} - phone number -{" "}
-                      {userData.addresses[address].phone}
-                    </Typography>
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      Delivery address
-                    </Typography>
-                    <Typography>
-                      {userData.addresses[address].street} -{" "}
-                      {userData.addresses[address].city},{" "}
-                      {userData.addresses[address].region},{" "}
-                      {userData.addresses[address].country}
-                    </Typography>
-                    <Button>Add new address</Button>
-                  </Box>
-                ))}
-            </Box>
-          ) : (
-            showForm &&
-            showUserOptions.option === "delivery" && (
-              <Box>
-                <Box>
-                  <Typography variant="h6">Client information</Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      gap: "20px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginTop: "20px",
-                      flexWrap: "wrap",
-                      "& .MuiTextField-root": {
-                        flex: "1 0 40%",
-                      },
-                    }}
-                  >
-                    <TextField
-                      required
-                      fullWidth
-                      id="client"
-                      label="Person to contact"
-                      name="client"
-                      autoComplete="client"
-                      onChange={updateForm("client")}
-                      value={form.client}
-                    />
-                    <TextField
-                      required
-                      fullWidth
-                      id="phone"
-                      label="Phone Number"
-                      name="phone"
-                      autoComplete="phone"
-                      onChange={updateForm("phone")}
-                      value={form.phone}
-                    />
-                  </Box>
-                </Box>
-                <Typography variant="h6">Add address</Typography>
-                <Box
+            {/* Delivery options starts here (to address, or personal take) */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
+                alignItems: "center",
+                marginTop: "20px",
+                width: "100%",
+              }}
+            >
+              <FormControl fullWidth>
+                <FormLabel id="demo-radio-buttons-group-label">
+                  <Typography variant="h4">Delivery Information</Typography>
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="delivery"
+                  name="radio-buttons-group"
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    gap: "20px",
                     justifyContent: "center",
+                    gap: "20px",
                     alignItems: "center",
-                    marginTop: "20px",
-                    flexWrap: "wrap",
-                    "& .MuiTextField-root": {
-                      flex: "1 0 40%",
-                    },
+                    textAlign: "left",
+                    marginBottom: "20px",
                   }}
+                  onChange={handleDeliveryOption}
                 >
-                  <TextField
-                    required
-                    fullWidth
-                    id="city"
-                    label="City"
-                    name="city"
-                    autoComplete="city"
-                    onChange={updateForm("city")}
-                    value={form.city}
-                  />
-                  <TextField
-                    required
-                    fullWidth
-                    id="street"
-                    label="Street"
-                    name="street"
-                    autoComplete="street"
-                    onChange={updateForm("street")}
-                    value={form.street}
-                  />
-                  <TextField
-                    required
-                    fullWidth
-                    id="region"
-                    label="Region"
-                    name="region"
-                    autoComplete="region"
-                    onChange={updateForm("region")}
-                    value={form.region}
-                  />
-                  <TextField
-                    required
-                    fullWidth
-                    id="country"
-                    label="Country"
-                    name="country"
-                    autoComplete="country"
-                    onChange={updateForm("country")}
-                    value={form.country}
-                  />
-                  <Button
+                  <FormControlLabel
+                    value="delivery"
+                    control={<Radio />}
+                    label="Delivery to address"
                     sx={{
-                      width: "20%",
+                      display: "flex",
+                      gap: "20px",
+                      alignItems: "center",
+                      textAlign: "left",
+                      borderRadius: "10px",
+                      boxShadow: `-3px -3px 5px 1px ${defaultTheme.palette.primary.main}`,
+                      padding: "10px",
+                      marginTop: "10px",
+                      width: "30%",
                     }}
-                    onClick={updateUserData}
-                  >
-                    Save info
-                  </Button>
-                </Box>
-              </Box>
-            )
-          )}
-
-          {showUserOptions.option === "take" && (
-            <Box>
-              <TextField
-                required
-                fullWidth
-                id="address"
-                label="Supplier Address"
-                name="address"
-                autoComplete="address"
-              />
+                  />
+                  <FormControlLabel
+                    value="take"
+                    control={<Radio />}
+                    label="Take yourself"
+                    sx={{
+                      display: "flex",
+                      gap: "20px",
+                      alignItems: "center",
+                      textAlign: "left",
+                      borderRadius: "10px",
+                      boxShadow: `3px 3px 5px 1px ${defaultTheme.palette.primary.main}`,
+                      padding: "10px",
+                      marginTop: "10px",
+                      width: "30%",
+                    }}
+                  />
+                </RadioGroup>
+              </FormControl>
             </Box>
-          )}
+            {/* Delivery options ends here */}
+
+            {/* Here starts the person information views (the address if user have one, inputs otherwise) */}
+            {loading ? (
+              <CircularProgress />
+            ) : showUserOptions.option === "delivery" && !showForm ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "80%",
+                  gap: "10px",
+                  alignItems: "start",
+                  padding: "20px",
+                  backgroundColor: "rgba(255, 255, 255)",
+                  borderRadius: "10px",
+                }}
+              >
+                <Typography variant="h6">
+                  Choose address for delivery
+                </Typography>
+                {userData.addresses &&
+                  Object.keys(userData.addresses).map((address) => (
+                    <Box
+                      key={address}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "start",
+                        width: "100%",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: "10px",
+                          width: "100%",
+                          borderBottom: "2px solid #d3d3d3",
+                          borderTop: "2px solid #d3d3d3",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        {/* Check if the user have second address, does this will work*/}
+                        <RadioGroup
+                          key={address}
+                          value={selectedAddress}
+                          onChange={(e) => setSelectedAddress(e.target.value)}
+                        >
+                          <FormControlLabel
+                            value={address}
+                            control={<Radio />}
+                            checked={selectedAddress === address}
+                          />
+                        </RadioGroup>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "start",
+                            gap: "5px",
+                            margin: "10px 0px 10px 0px",
+                          }}
+                        >
+                          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                            Person to contact
+                          </Typography>
+                          <Typography>
+                            {userData.addresses[address].client} - phone number
+                            - {userData.addresses[address].phone}
+                          </Typography>
+                          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                            Delivery address
+                          </Typography>
+                          <Typography>
+                            {userData.addresses[address].street} -{" "}
+                            {userData.addresses[address].city},{" "}
+                            {userData.addresses[address].region},{" "}
+                            {userData.addresses[address].country}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  ))}
+                <Button onClick={() => setShowPopUpForOtherAddress(true)}>
+                  Add new address
+                </Button>
+              </Box>
+            ) : (
+              showForm &&
+              showUserOptions.option === "delivery" && (
+                <AddOtherAddress
+                  open={showPopUpForOtherAddress}
+                  setClose={setShowPopUpForOtherAddress}
+                  form={form}
+                  updateForm={updateForm}
+                  updateUserData={updateUserData}
+                  userData={userData}
+                />
+              )
+            )}
+            {/* Here ends person information */}
+
+            {showUserOptions.option === "take" && (
+              <Box>
+                <TextField
+                  required
+                  fullWidth
+                  id="address"
+                  label="Supplier Address"
+                  name="address"
+                  autoComplete="address"
+                />
+              </Box>
+            )}
+
+            {showPopUpForOtherAddress && (
+              <AddOtherAddress
+                open={showPopUpForOtherAddress}
+                setClose={setShowPopUpForOtherAddress}
+                form={form}
+                updateForm={updateForm}
+                updateUserData={updateUserData}
+              />
+            )}
+          </Box>
         </Box>
       </Container>
     </ThemeProvider>
