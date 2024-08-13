@@ -1,3 +1,4 @@
+import { useContext, useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -15,24 +16,24 @@ import {
   FormControlLabel,
   Radio,
   Button,
+  CircularProgress,
+  Stack,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
-import Stack from "@mui/material/Stack";
 import Check from "@mui/icons-material/Check";
 import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
-import { NavLink } from "react-router-dom";
 import { PiShoppingCartThin } from "react-icons/pi";
-import { useContext, useState } from "react";
 import { AppContext } from "../../../components/context/UserContext/UserContext";
-import { updateUserAddress } from "../../../services/UserServices/user-services";
+import { getUserData, updateUserAddress } from "../../../services/UserServices/user-services";
 
 export default function ShippingDetails() {
-  const { userData } = useContext(AppContext);
+  const { user, userData, setUserContext } = useContext(AppContext);
   const defaultTheme = createTheme();
+
   const [form, setForm] = useState({
     client: "",
     phone: "",
@@ -41,9 +42,13 @@ export default function ShippingDetails() {
     region: "",
     country: "",
   });
+
   const [showUserOptions, setShowUserOptions] = useState({
     option: "delivery",
   });
+  const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(true);
+
   const steps = [
     "My Cart",
     "Shipping Information",
@@ -56,15 +61,39 @@ export default function ShippingDetails() {
   };
 
   const updateForm = (prop) => (e) => {
-    setForm({
-      ...form,
-      [prop]: e.target.value,
-    });
+    setForm({ ...form, [prop]: e.target.value });
   };
 
-  const updateUserData = () => {
-    updateUserAddress(userData, form);
+  const updateUserData = async () => {
+    setLoading(true);
+    await updateUserAddress(userData, form);
+    if (user) {
+        getUserData(user.uid).then((snapshot) => {
+          if (snapshot.exists()) {
+            setUserContext({
+              user: user,
+              userData: snapshot.val()[Object.keys(snapshot.val())[0]],
+            });
+          }
+        });
+      }
+    setTimeout(() => {
+      setLoading(false);
+      setShowForm(false);
+    }, 2000);
   };
+
+  useEffect(() => {
+    if (
+      userData &&
+      userData.addresses &&
+      Object.keys(userData.addresses).length > 0
+    ) {
+      setShowForm(false);
+    } else {
+      setShowForm(true);
+    }
+  }, [userData]);
 
   if (!userData) {
     return <h1>Loading...</h1>;
@@ -164,6 +193,7 @@ export default function ShippingDetails() {
                   textAlign: "left",
                   marginBottom: "20px",
                 }}
+                onChange={handleDeliveryOption}
               >
                 <FormControlLabel
                   value="delivery"
@@ -180,7 +210,6 @@ export default function ShippingDetails() {
                     marginTop: "10px",
                     width: "30%",
                   }}
-                  onClick={() => handleDeliveryOption(event)}
                 />
                 <FormControlLabel
                   value="take"
@@ -197,38 +226,83 @@ export default function ShippingDetails() {
                     marginTop: "10px",
                     width: "30%",
                   }}
-                  onClick={() => handleDeliveryOption(event)}
                 />
               </RadioGroup>
             </FormControl>
           </Box>
-          {showUserOptions.option === "delivery" && userData.addresses ? (
+
+          {loading ? (
+            <CircularProgress />
+          ) : showUserOptions.option === "delivery" && !showForm ? (
             <Box>
               <Typography variant="h6">Choose address for delivery</Typography>
-              {Object.keys(userData.addresses).map((address) => {
-                return (
+              {userData.addresses &&
+                Object.keys(userData.addresses).map((address) => (
                   <Box key={address}>
-                    <FormControlLabel
-                      value={address}
-                      control={<Radio />}
-                    />
-                    <Typography variant="h6" sx={{
-                        fontWeight: "bold",
-                    }}>Person to contact</Typography>
-                    <Typography>{userData.addresses[address].client} - phone number - {userData.addresses[address].phone}</Typography>
-                    <Typography variant="h6" sx={{
-                        fontWeight: "bold",
-                    }}>Delivery address</Typography>
-                    <Typography>{userData.addresses[address].street} - {userData.addresses[address].city}, {userData.addresses[address].region}, {userData.addresses[address].country}</Typography>
+                    <FormControlLabel value={address} control={<Radio />} />
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                      Person to contact
+                    </Typography>
+                    <Typography>
+                      {userData.addresses[address].client} - phone number -{" "}
+                      {userData.addresses[address].phone}
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                      Delivery address
+                    </Typography>
+                    <Typography>
+                      {userData.addresses[address].street} -{" "}
+                      {userData.addresses[address].city},{" "}
+                      {userData.addresses[address].region},{" "}
+                      {userData.addresses[address].country}
+                    </Typography>
                     <Button>Add new address</Button>
                   </Box>
-                );
-              })}
+                ))}
             </Box>
           ) : (
-            <Box>
+            showForm &&
+            showUserOptions.option === "delivery" && (
               <Box>
-                <Typography variant="h6">Client information</Typography>
+                <Box>
+                  <Typography variant="h6">Client information</Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: "20px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginTop: "20px",
+                      flexWrap: "wrap",
+                      "& .MuiTextField-root": {
+                        flex: "1 0 40%",
+                      },
+                    }}
+                  >
+                    <TextField
+                      required
+                      fullWidth
+                      id="client"
+                      label="Person to contact"
+                      name="client"
+                      autoComplete="client"
+                      onChange={updateForm("client")}
+                      value={form.client}
+                    />
+                    <TextField
+                      required
+                      fullWidth
+                      id="phone"
+                      label="Phone Number"
+                      name="phone"
+                      autoComplete="phone"
+                      onChange={updateForm("phone")}
+                      value={form.phone}
+                    />
+                  </Box>
+                </Box>
+                <Typography variant="h6">Add address</Typography>
                 <Box
                   sx={{
                     display: "flex",
@@ -246,91 +320,56 @@ export default function ShippingDetails() {
                   <TextField
                     required
                     fullWidth
-                    id="client"
-                    label="Person to contact"
-                    name="client"
-                    autoComplete="client"
-                    onChange={updateForm("client")}
-                    value={form.client}
-                  ></TextField>
+                    id="city"
+                    label="City"
+                    name="city"
+                    autoComplete="city"
+                    onChange={updateForm("city")}
+                    value={form.city}
+                  />
                   <TextField
                     required
                     fullWidth
-                    id="phone"
-                    label="Phone Number"
-                    name="phone"
-                    autoComplete="phone"
-                    onChange={updateForm("phone")}
-                    value={form.phone}
-                  ></TextField>
+                    id="street"
+                    label="Street"
+                    name="street"
+                    autoComplete="street"
+                    onChange={updateForm("street")}
+                    value={form.street}
+                  />
+                  <TextField
+                    required
+                    fullWidth
+                    id="region"
+                    label="Region"
+                    name="region"
+                    autoComplete="region"
+                    onChange={updateForm("region")}
+                    value={form.region}
+                  />
+                  <TextField
+                    required
+                    fullWidth
+                    id="country"
+                    label="Country"
+                    name="country"
+                    autoComplete="country"
+                    onChange={updateForm("country")}
+                    value={form.country}
+                  />
+                  <Button
+                    sx={{
+                      width: "20%",
+                    }}
+                    onClick={updateUserData}
+                  >
+                    Save info
+                  </Button>
                 </Box>
               </Box>
-              <Typography variant="h6">Add address</Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "20px",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginTop: "20px",
-                  flexWrap: "wrap",
-                  "& .MuiTextField-root": {
-                    flex: "1 0 40%",
-                  },
-                }}
-              >
-                <TextField
-                  required
-                  fullWidth
-                  id="city"
-                  label="City"
-                  name="city"
-                  autoComplete="city"
-                  onChange={updateForm("city")}
-                  value={form.city}
-                ></TextField>
-                <TextField
-                  required
-                  fullWidth
-                  id="street"
-                  label="Street"
-                  name="street"
-                  autoComplete="street"
-                  onChange={updateForm("street")}
-                  value={form.street}
-                ></TextField>
-                <TextField
-                  required
-                  fullWidth
-                  id="region"
-                  label="Region"
-                  name="region"
-                  autoComplete="region"
-                  onChange={updateForm("region")}
-                  value={form.region}
-                ></TextField>
-                <TextField
-                  required
-                  fullWidth
-                  id="country"
-                  label="Country"
-                  name="country"
-                  autoComplete="country"
-                  onChange={updateForm("country")}
-                  value={form.country}
-                ></TextField>
-                <Button
-                  sx={{
-                    width: "20%",
-                  }}
-                  onClick={updateUserData}
-                >
-                  Save info
-                </Button>
-              </Box>
-            </Box>
+            )
           )}
+
           {showUserOptions.option === "take" && (
             <Box>
               <TextField
@@ -340,7 +379,7 @@ export default function ShippingDetails() {
                 label="Supplier Address"
                 name="address"
                 autoComplete="address"
-              ></TextField>
+              />
             </Box>
           )}
         </Box>
